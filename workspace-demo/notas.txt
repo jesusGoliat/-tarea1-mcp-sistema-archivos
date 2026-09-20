@@ -1,0 +1,3 @@
+Notas de la demo del servidor MCP de sistema de archivos.
+
+Este archivo existe para demostrar la operación "leer un archivo existente".
