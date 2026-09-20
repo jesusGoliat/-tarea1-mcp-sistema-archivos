@@ -7,6 +7,12 @@
         "@modelcontextprotocol/server-filesystem",
         "/home/jesus/Desktop/Moviles/Tarea1/workspace-demo"
       ]
+    },
+    "servidor-propio": {
+      "command": "/home/jesus/venvs/pipeline/bin/python",
+      "args": [
+        "/home/jesus/Desktop/Moviles/Tarea1/servidor-propio/server.py"
+      ]
     }
   }
 }
