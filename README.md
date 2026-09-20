@@ -82,18 +82,22 @@ Se eligió **Claude Code** como cliente/host MCP porque:
 
 ## Evidencias
 
-Capturas de pantalla en `img/` (nomenclatura sugerida, a completar durante la demo en vivo):
+Todas las operaciones se ejecutaron realmente (no simuladas) dentro de una sesión de Claude Code conectada a `filesystem-tarea1` y `servidor-propio`. Capturas de pantalla en `img/` (nomenclatura sugerida, tomadas de esa sesión):
 
-- `img/01-listar-directorio.png` — listar el contenido de `workspace-demo/`.
-- `img/02-leer-archivo.png` — leer `workspace-demo/notas.txt`.
-- `img/03-crear-archivo.png` — crear un archivo nuevo con contenido.
-- `img/04-modificar-archivo.png` — modificar un archivo existente.
-- `img/05-buscar-archivo.png` — buscar un archivo por nombre o contenido.
-- `img/06-limite-seguridad.png` — intento de acceso a un archivo **fuera** de `workspace-demo/`, rechazado.
+- `img/01-listar-directorio.png` — `list_directory` sobre `workspace-demo/` (devuelve `notas.txt`, `tareas-pendientes.txt`).
+- `img/02-leer-archivo.png` — `read_text_file` de `workspace-demo/notas.txt`.
+- `img/03-crear-archivo.png` — `write_file` crea `workspace-demo/creado-por-mcp.txt`.
+- `img/04-modificar-archivo.png` — `edit_file` agrega una línea a `workspace-demo/tareas-pendientes.txt` (diff mostrado por la propia herramienta).
+- `img/05-buscar-archivo.png` — `search_files` con patrón `*pendientes*` encuentra `tareas-pendientes.txt`.
+- `img/06-limite-seguridad.png` — intento de `list_directory` sobre `/home/jesus/Desktop/Moviles` (fuera del proyecto), rechazado.
+
+### Nota: el directorio autorizado real terminó siendo todo el proyecto, no solo `workspace-demo/`
+
+Al conectar el servidor, `list_allowed_directories` reportó como único directorio permitido la carpeta completa del proyecto (`.../Tarea1`), y no `workspace-demo/` como se había configurado por argumento de arranque. La causa (documentada con más detalle en [`docs/05-servidor-filesystem.md`](docs/05-servidor-filesystem.md)) es que Claude Code, como cliente MCP, implementa el protocolo de **Roots** y comparte automáticamente la raíz del proyecto abierto con el servidor — y, según la documentación oficial del servidor, esa notificación de Roots **reemplaza por completo** el directorio pasado por argumento, no lo restringe. Se confirmó en vivo: leer `README.md` (dentro de `Tarea1`, fuera de `workspace-demo/`) funcionó sin problema. El directorio del proyecto sigue siendo una carpeta específica creada para esta tarea —nunca la raíz del disco ni la carpeta de usuario completa—, así que el requisito de delimitar el alcance se sigue cumpliendo, solo que a nivel de todo el proyecto en lugar de únicamente `workspace-demo/`.
 
 ### Prueba del límite de seguridad
 
-Se solicitó al modelo, a través de Claude Code, acceder a un archivo fuera del directorio autorizado (por ejemplo, un archivo en `/home/jesus/Desktop/Moviles/`, fuera de `workspace-demo/`). El servidor `filesystem-tarea1` rechazó la operación porque valida cada ruta solicitada contra la lista de directorios permitidos con la que arrancó (pasada como argumento al lanzar el proceso); cualquier ruta que resuelva fuera de esa lista —incluyendo intentos con `..` o enlaces simbólicos— se rechaza antes de tocar el sistema de archivos real. El mecanismo que impidió la operación es, por lo tanto, la validación de rutas del propio servidor MCP, no un permiso del sistema operativo ni una regla de Claude Code. Ver captura en `img/06-limite-seguridad.png` y detalle técnico en [`docs/05-servidor-filesystem.md`](docs/05-servidor-filesystem.md).
+Se solicitó al modelo, a través de Claude Code, listar el contenido de `/home/jesus/Desktop/Moviles` — el directorio **padre** del proyecto, fuera del alcance real autorizado. El servidor `filesystem-tarea1` rechazó la operación con el error `Access denied - path outside allowed directories: /home/jesus/Desktop/Moviles not in /home/jesus/Desktop/Moviles/Tarea1`, porque valida cada ruta solicitada contra la lista de directorios permitidos (en este caso, la raíz del proyecto notificada vía Roots); cualquier ruta que resuelva fuera de esa lista —incluyendo intentos con `..` o enlaces simbólicos— se rechaza antes de tocar el sistema de archivos real. El mecanismo que impidió la operación es, por lo tanto, la validación de rutas del propio servidor MCP, no un permiso del sistema operativo ni una regla de Claude Code. Ver captura en `img/06-limite-seguridad.png` y detalle técnico en [`docs/05-servidor-filesystem.md`](docs/05-servidor-filesystem.md).
 
 ## Conclusiones personales
 

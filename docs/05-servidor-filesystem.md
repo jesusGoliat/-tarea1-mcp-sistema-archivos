@@ -35,6 +35,12 @@ El servidor **exige** que se le indique, al arrancar, al menos un directorio per
 
 Todas las operaciones de las herramientas listadas arriba se validan contra esa lista de directorios permitidos antes de ejecutarse: si una ruta solicitada (incluso a través de enlaces simbólicos o rutas relativas con `..`) resuelve fuera de esos directorios, la operación se rechaza.
 
+### Hallazgo real durante la demo: Roots reemplaza al argumento de línea de comandos
+
+Al conectar el servidor en Claude Code con el argumento de arranque apuntando a `workspace-demo/`, `list_allowed_directories` reportó como directorio permitido **todo el proyecto** (`.../Tarea1`), no solo `workspace-demo/`. La causa, confirmada leyendo la documentación oficial del servidor: *"Roots notified by Client to Server completely replace any server-side Allowed directories when provided"* — es decir, cuando el cliente soporta el protocolo de Roots (como Claude Code, que comparte automáticamente la raíz del proyecto abierto), esa notificación **sustituye por completo** el directorio pasado por argumento al arrancar el servidor, no lo combina ni lo restringe más.
+
+Esto se verificó en vivo: leer `README.md` (dentro de `Tarea1` pero fuera de `workspace-demo/`) tuvo éxito, mientras que listar `/home/jesus/Desktop/Moviles` (fuera de todo `Tarea1`) fue rechazado con `Access denied - path outside allowed directories`. En la práctica, el directorio efectivamente autorizado en esta sesión fue la carpeta completa del proyecto `Tarea1` —creada específicamente para esta tarea, nunca la raíz del disco ni la carpeta de usuario completa—, no el subdirectorio `workspace-demo/` que se había configurado por argumento. La prueba del límite de seguridad del README usa, por eso, una ruta fuera de `Tarea1` por completo.
+
 ## Por qué existe ese límite y qué pasaría sin él
 
 El límite existe porque el modelo, al decidir qué herramienta invocar y con qué argumentos, **puede equivocarse o ser manipulado** (ver [06-seguridad.md](06-seguridad.md)). Sin un límite explícito de directorios:
@@ -42,7 +48,7 @@ El límite existe porque el modelo, al decidir qué herramienta invocar y con qu
 - Una instrucción ambigua, un error del modelo, o contenido malicioso dentro de un archivo leído previamente (inyección de instrucciones) podría hacer que el servidor intente leer, sobrescribir o borrar archivos fuera del proyecto en el que se está trabajando — por ejemplo, archivos de configuración del sistema, credenciales guardadas en el directorio *home*, o cualquier otro archivo al que el proceso del sistema operativo tuviera acceso.
 - El "radio de explosión" (*blast radius*) de un error sería tan amplio como los permisos del usuario del sistema operativo que ejecuta el servidor — potencialmente toda la cuenta de usuario.
 
-Al restringir el servidor a un directorio de trabajo específico (en esta tarea, `workspace-demo/`), cualquier error de razonamiento del modelo, o cualquier intento de manipulación vía contenido de archivos, queda contenido dentro de ese directorio: el mecanismo de validación de rutas del propio servidor rechaza cualquier operación que intente salir de él, independientemente de lo que el modelo "quiera" hacer (ver la prueba de límite de seguridad documentada en el README).
+Al restringir el servidor a un directorio de trabajo específico creado para la tarea (en la práctica, la carpeta del proyecto `Tarea1`, por el comportamiento de Roots descrito arriba), cualquier error de razonamiento del modelo, o cualquier intento de manipulación vía contenido de archivos, queda contenido dentro de ese directorio: el mecanismo de validación de rutas del propio servidor rechaza cualquier operación que intente salir de él, independientemente de lo que el modelo "quiera" hacer (ver la prueba de límite de seguridad documentada en el README).
 
 ## Referencias de este documento
 

@@ -3,3 +3,4 @@ Lista de tareas pendientes (archivo de ejemplo para la demo de busqueda).
 - Revisar documentacion de MCP
 - Probar servidor de sistema de archivos
 - Grabar capturas de pantalla
+- [COMPLETADO] Demostrar operaciones del servidor MCP en vivo
