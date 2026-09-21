@@ -18,10 +18,8 @@ Un **modelo con razonamiento explícito** (a veces llamado *reasoning model*) es
 
 Es un error conceptual pensar que esta capacidad "aparece sola" simplemente por hacer el modelo más grande. La evidencia apunta a que el razonamiento explícito depende de dos cosas adicionales, no solo de la escala del modelo:
 
-- **Técnicas de entrenamiento específicas**: entrenar al modelo con aprendizaje por refuerzo sobre tareas con **recompensas verificables** (por ejemplo, problemas matemáticos o de código donde la respuesta correcta se puede comprobar automáticamente). Esto premia explícitamente las cadenas de razonamiento que llevan a la respuesta correcta, en lugar de solo premiar imitar texto humano.
-- **Cómputo adicional en el momento de la inferencia** (*test-time compute* / *inference-time compute*): el modelo dedica más tokens y más tiempo de cómputo a "pensar" antes de responder, lo cual es una decisión de diseño del sistema de inferencia, no una propiedad automática del tamaño del modelo. Un modelo pequeño con mucho cómputo de inferencia puede superar en ciertas tareas a un modelo mucho más grande que responde de inmediato.
-
-En otras palabras: tamaño del modelo, entrenamiento con RL sobre tareas verificables, y presupuesto de cómputo en inferencia son tres ejes independientes. El razonamiento explícito es el resultado de invertir deliberadamente en los dos últimos, no una consecuencia automática del primero.
+- **Técnicas de entrenamiento específicas**: entrenar al modelo con aprendizaje por refuerzo sobre tareas con **recompensas verificables** (por ejemplo, problemas matemáticos o de código donde la respuesta correcta se puede comprobar automáticamente). 
+- **Cómputo adicional en el momento de la inferencia** (*test-time compute* / *inference-time compute*): el modelo dedica más tokens y más tiempo de cómputo a "pensar" antes de responder, lo cual es una decisión de diseño del sistema de inferencia, no una propiedad automática del tamaño del modelo.
 
 ## Referencias de este documento
 
