@@ -20,7 +20,3 @@ Es un error conceptual pensar que esta capacidad "aparece sola" simplemente por 
 
 - **Técnicas de entrenamiento específicas**: entrenar al modelo con aprendizaje por refuerzo sobre tareas con **recompensas verificables** (por ejemplo, problemas matemáticos o de código donde la respuesta correcta se puede comprobar automáticamente). 
 - **Cómputo adicional en el momento de la inferencia** (*test-time compute* / *inference-time compute*): el modelo dedica más tokens y más tiempo de cómputo a "pensar" antes de responder, lo cual es una decisión de diseño del sistema de inferencia, no una propiedad automática del tamaño del modelo.
-
-## Referencias de este documento
-
-- Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). *Attention is all you need*. Advances in Neural Information Processing Systems, 30.
