@@ -38,7 +38,6 @@ Investigación sobre cómo un LLM, aislado por diseño (solo texto de entrada/sa
 | [05-servidor-filesystem.md](docs/05-servidor-filesystem.md) | El servidor filesystem como servidor de referencia y su alcance por directorios |
 | [06-seguridad.md](docs/06-seguridad.md) | Riesgos (prompt injection, path traversal, escritura no deseada) y mitigaciones |
 | [07-casos-de-uso.md](docs/07-casos-de-uso.md) | Tres herramientas reales que implementan MCP |
-| [exposicion-contexto.md](docs/exposicion-contexto.md) | Guion/contexto para preparar la exposición (no son las diapositivas) |
 
 ---
 
