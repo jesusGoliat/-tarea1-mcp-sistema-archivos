@@ -11,6 +11,18 @@
 
 ---
 
+## Estructura del repositorio
+
+```text
+README.md          Este documento
+docs/               Investigación, en archivos .md
+config/             Configuración MCP utilizada (sin credenciales)
+img/                Capturas de pantalla de la demo
+servidor-propio/    Servidor MCP propio (bonus)
+workspace-demo/     Directorio de trabajo delimitado usado por el servidor filesystem
+```
+---
+
 ## Resumen
 
 Investigación sobre cómo un LLM, aislado por diseño (solo texto de entrada/salida), pasa a operar sobre archivos locales mediante el **Model Context Protocol (MCP)**, distinguiéndolo de una API tradicional. En la parte práctica se instaló y probó un **servidor MCP de sistema de archivos** delimitado a un directorio de trabajo propio, usando **Claude Code** como cliente/host, y (bonus) un **servidor MCP propio** con dos herramientas en Python.
@@ -112,13 +124,12 @@ Access denied - path outside allowed directories: /home/jesus/Desktop/Moviles no
 
 ![Límite de seguridad](img/06-limite-seguridad.png)
 
-**Nota técnica:** el directorio realmente autorizado resultó ser todo el proyecto (`Tarea1`), no solo `workspace-demo/` como se configuró por argumento. Claude Code, como cliente MCP, comparte con el servidor la raíz del proyecto vía el protocolo de **Roots**, y esa notificación *reemplaza* el directorio pasado por argumento al arrancar el servidor. Se comprobó en vivo: leer `README.md` (fuera de `workspace-demo/` pero dentro de `Tarea1`) funcionó; listar fuera de `Tarea1` fue rechazado. El alcance sigue siendo una carpeta específica de la tarea, nunca la raíz del disco ni el home completo. Detalle en [docs/05-servidor-filesystem.md](docs/05-servidor-filesystem.md).
 
 ---
 
-## Conclusiones personales
+## Conclusiones
 
-Antes de esta tarea entendía "conectar una IA a mis archivos" como algo vago; después de implementarlo, la diferencia con una API quedó clara: en una API yo decido de antemano qué se llama, mientras que con MCP es el modelo quien decide en tiempo real qué herramienta usar según lo que le pido. Lo que más me sorprendió fue el hallazgo con Roots: configuré el servidor para restringirlo a `workspace-demo/`, pero Claude Code terminó compartiendo la raíz de todo el proyecto y ese permiso reemplazó mi configuración. Me hizo notar que la seguridad de un servidor MCP no depende solo de cómo lo configuras, sino también de qué le comparte el cliente. La prueba del límite (el intento fuera del proyecto, rechazado) sí me dio confianza en que, aun con ese matiz, el mecanismo de validación de rutas funciona de verdad. En general, esto cambia la forma de desarrollar software porque el modelo deja de ser solo un generador de texto y pasa a ser un agente que opera sobre el entorno real, bajo límites explícitos que uno tiene que entender y revisar con cuidado.
+Antes de esta tarea entendía "conectar una IA a mis archivos" como algo vago; después de implementarlo, la diferencia con una API quedó clara: en una API yo decido de antemano qué se llama, mientras que con MCP es el modelo quien decide en tiempo real qué herramienta usar según lo que le pido. Lo que más me sorprendió fue el hallazgo con Roots: configuré el servidor para restringirlo a `workspace-demo/`, pero Claude Code terminó compartiendo la raíz de todo el proyecto y ese permiso reemplazó mi configuración. Me hizo notar que la seguridad de un servidor MCP no depende solo de cómo lo configuras, sino también de qué le comparte el cliente.
 
 ---
 
@@ -132,27 +143,6 @@ Model Context Protocol. (s.f.). *Architecture*. https://modelcontextprotocol.io/
 
 Model Context Protocol. (s.f.). *Transports*. https://modelcontextprotocol.io/specification/2026-07-28/basic/transports
 
-Model Context Protocol. (s.f.). *Roots*. https://modelcontextprotocol.io/specification/2026-07-28/client/roots
-
-Model Context Protocol. (s.f.). *Elicitation*. https://modelcontextprotocol.io/specification/2026-07-28/client/elicitation
-
-Modelcontextprotocol/servers. (s.f.). *Filesystem MCP Server* [Repositorio de código]. GitHub. https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem
-
-Google Developers Blog. (s.f.). *Build with Google Antigravity, our new agentic development platform*. https://developers.googleblog.com/build-with-google-antigravity-our-new-agentic-development-platform/
-
 Cursor. (s.f.). *Model Context Protocol*. https://cursor.com/docs/context/mcp
 
-Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). *Attention is all you need*. Advances in Neural Information Processing Systems, 30.
 
----
-
-## Estructura del repositorio
-
-```text
-README.md          Este documento
-docs/               Investigación, en archivos .md
-config/             Configuración MCP utilizada (sin credenciales)
-img/                Capturas de pantalla de la demo
-servidor-propio/    Servidor MCP propio (bonus)
-workspace-demo/     Directorio de trabajo delimitado usado por el servidor filesystem
-```
