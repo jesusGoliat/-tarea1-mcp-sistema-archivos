@@ -118,7 +118,7 @@ Access denied - path outside allowed directories: /home/jesus/Desktop/Moviles no
 
 ## Conclusiones personales
 
-[Completar con tus propias palabras: qué aprendiste de MCP vs. APIs, qué te sorprendió del hallazgo de Roots y del límite de seguridad, y cómo cambia esto la forma de desarrollar software.]
+Antes de esta tarea entendía "conectar una IA a mis archivos" como algo vago; después de implementarlo, la diferencia con una API quedó clara: en una API yo decido de antemano qué se llama, mientras que con MCP es el modelo quien decide en tiempo real qué herramienta usar según lo que le pido. Lo que más me sorprendió fue el hallazgo con Roots: configuré el servidor para restringirlo a `workspace-demo/`, pero Claude Code terminó compartiendo la raíz de todo el proyecto y ese permiso reemplazó mi configuración. Me hizo notar que la seguridad de un servidor MCP no depende solo de cómo lo configuras, sino también de qué le comparte el cliente. La prueba del límite (el intento fuera del proyecto, rechazado) sí me dio confianza en que, aun con ese matiz, el mecanismo de validación de rutas funciona de verdad. En general, esto cambia la forma de desarrollar software porque el modelo deja de ser solo un generador de texto y pasa a ser un agente que opera sobre el entorno real, bajo límites explícitos que uno tiene que entender y revisar con cuidado.
 
 ---
 
