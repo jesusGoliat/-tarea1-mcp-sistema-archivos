@@ -1,10 +1,8 @@
 # 4. Arquitectura de MCP
 
-**Versión de la especificación consultada:** [`2026-07-28`](https://modelcontextprotocol.io/specification/2026-07-28/) (versión **Current** al momento de escribir este documento — septiembre de 2026). MCP identifica sus versiones con el formato `YYYY-MM-DD`, correspondiente a la última fecha en que se hicieron cambios incompatibles hacia atrás (Model Context Protocol, s.f.-a). La especificación se actualiza con cierta frecuencia, así que cualquier afirmación aquí está atada a esta versión concreta.
-
 ## Modelo host / cliente / servidor
 
-MCP define tres roles (Model Context Protocol, s.f.-b):
+MCP define tres roles:
 
 - **Host**: el proceso de la aplicación que contiene y coordina todo. Crea y administra las instancias de cliente, controla los permisos de conexión, hace cumplir las políticas de seguridad y gestiona el consentimiento del usuario, y coordina la integración con el modelo de lenguaje. **En nuestro caso, Claude Code es el host.**
 - **Cliente**: vive dentro del host y se comunica con **exactamente un** servidor (relación 1:1). Adjunta la versión del protocolo y sus capacidades a cada petición, enruta los mensajes y mantiene el límite de seguridad entre servidores distintos. **En nuestro caso, el cliente MCP integrado en Claude Code** es quien habla con el servidor de sistema de archivos.
@@ -26,8 +24,8 @@ Es un error frecuente mencionar solo las *tools* y omitir *resources* y *prompts
 
 El cliente también expone primitivas que los servidores pueden invocar cuando necesitan algo del usuario o del entorno:
 
-- **Roots**: forma en que el cliente comunica al servidor qué directorios o archivos son relevantes para la sesión actual (por ejemplo, la carpeta del proyecto abierto). Es información orientativa, no un mecanismo de control de acceso en sí mismo. *Nota de actualidad*: en la versión `2026-07-28` de la especificación, **Roots quedó marcado como obsoleto** (deprecado) en favor de pasar directorios o archivos explícitamente como parámetros de herramienta, URIs de recurso o configuración del servidor (Model Context Protocol, s.f.-c) — aunque sigue vigente en la especificación durante un período de transición y muchos servidores desplegados hoy, incluido el de sistema de archivos, siguen soportándolo.
-- **Elicitation**: mecanismo estandarizado para que un servidor pida información adicional al usuario **a través del cliente**, ya sea con un formulario estructurado validado por un esquema JSON (modo *form*) o redirigiendo a una URL externa para interacciones sensibles como flujos de autenticación (modo *url*) (Model Context Protocol, s.f.-d). Esto es lo que en la práctica se traduce, por ejemplo, en la confirmación humana antes de que un servidor ejecute una operación sensible.
+- **Roots**: forma en que el cliente comunica al servidor qué directorios o archivos son relevantes para la sesión actual (por ejemplo, la carpeta del proyecto abierto). Es información orientativa, no un mecanismo de control de acceso en sí mismo. *Nota de actualidad*: en la versión `2026-07-28` de la especificación, **Roots quedó marcado como obsoleto** (deprecado) en favor de pasar directorios o archivos explícitamente como parámetros de herramienta, URIs de recurso o configuración del servidor (Model Context Protocol) — aunque sigue vigente en la especificación durante un período de transición y muchos servidores desplegados hoy, incluido el de sistema de archivos, siguen soportándolo.
+- **Elicitation**: mecanismo estandarizado para que un servidor pida información adicional al usuario **a través del cliente**, ya sea con un formulario estructurado validado por un esquema JSON (modo *form*) o redirigiendo a una URL externa para interacciones sensibles como flujos de autenticación (modo *url*) (Model Context Protocol). Esto es lo que en la práctica se traduce, por ejemplo, en la confirmación humana antes de que un servidor ejecute una operación sensible.
 
 ## Transportes
 
@@ -38,10 +36,3 @@ MCP separa claramente el **significado** de los mensajes (definido por el protoc
 
 En todos los casos, el formato de los mensajes es **JSON-RPC 2.0**: el servidor nunca inicia una petición JSON-RPC hacia el cliente por su cuenta ni el cliente envía respuestas JSON-RPC sin que exista una petición previa — la dirección de los mensajes está estrictamente definida por el protocolo.
 
-## Referencias de este documento
-
-- Model Context Protocol. (s.f.-a). *Versioning*. Recuperado en septiembre de 2026, de https://modelcontextprotocol.io/specification/versioning
-- Model Context Protocol. (s.f.-b). *Architecture* (Versión 2026-07-28). Recuperado en septiembre de 2026, de https://modelcontextprotocol.io/specification/2026-07-28/architecture
-- Model Context Protocol. (s.f.-c). *Roots* (Versión 2026-07-28). Recuperado en septiembre de 2026, de https://modelcontextprotocol.io/specification/2026-07-28/client/roots
-- Model Context Protocol. (s.f.-d). *Elicitation* (Versión 2026-07-28). Recuperado en septiembre de 2026, de https://modelcontextprotocol.io/specification/2026-07-28/client/elicitation
-- Model Context Protocol. (s.f.-e). *Transports* (Versión 2026-07-28). Recuperado en septiembre de 2026, de https://modelcontextprotocol.io/specification/2026-07-28/basic/transports
