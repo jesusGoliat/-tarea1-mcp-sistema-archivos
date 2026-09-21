@@ -4,13 +4,10 @@
 
 Una **API** (*Application Programming Interface*) es un contrato entre dos programas. Alguien que desarrolla software lee la documentación de esa API (por ejemplo, la de una API REST de clima), decide de antemano **qué endpoint** necesita llamar (`GET /weather?city=CDMX`), arma la petición con los parámetros correctos, la envía, y escribe código específico que sabe interpretar la forma exacta de la respuesta (por ejemplo, un JSON con una clave `temperature`).
 
-El punto clave es que **la decisión de qué se llama, cuándo y con qué parámetros está fija en el código, escrita por una persona antes de que el programa se ejecute**. El programa no "decide" nada en tiempo de ejecución: simplemente ejecuta la secuencia de llamadas que alguien programó. Cada integración con una API nueva requiere que una persona lea su documentación particular y escriba código de conexión específico para ella.
 
 ## Qué es MCP
 
 El **Model Context Protocol (MCP)** es un protocolo abierto, basado en **JSON-RPC 2.0**, mediante el cual un **servidor** publica un catálogo de **herramientas** (además de recursos y plantillas de prompt) con su nombre, su descripción en lenguaje natural y el **esquema** (tipo, forma) de los parámetros que aceptan. Un **cliente** MCP —dentro de una aplicación *host*, como Claude Code— se conecta a ese servidor y **descubre ese catálogo en tiempo de ejecución**: no necesita conocer de antemano qué herramientas existen.
-
-Cuando la persona usuaria le pide algo al modelo en lenguaje natural (por ejemplo, "lee el archivo `notas.txt`"), es **el propio modelo** quien decide, a partir de las descripciones del catálogo descubierto, cuál herramienta invocar y con qué argumentos, en ese momento. La persona que programó el cliente MCP no tuvo que anticipar esa llamada concreta: solo tuvo que exponer el protocolo de descubrimiento; la decisión de "qué se invoca" se desplaza del código escrito de antemano al modelo, en tiempo de ejecución.
 
 Todo el intercambio (descubrimiento del catálogo, invocación de herramientas, respuestas) viaja como mensajes JSON-RPC 2.0 (`request`/`response`/`notification`), sobre uno de los transportes definidos por el protocolo (ver [04-arquitectura-mcp.md](04-arquitectura-mcp.md)).
 
@@ -32,5 +29,3 @@ Es fundamental dejarlo explícito: **MCP no reemplaza ni vuelve obsoletas a las 
 1. Describe esas operaciones en un catálogo que un modelo puede leer y entender.
 2. Permite que el modelo decida cuál invocar según el lenguaje natural del usuario.
 3. Estandariza cómo se transmiten esa invocación y su resultado.
-
-Dicho de otro modo: las APIs siguen siendo la forma en que el software accede a datos y funcionalidad. MCP es una **capa de descubribilidad e interoperabilidad para modelos de lenguaje** sobre esas APIs y recursos ya existentes, no un sustituto de ellas.
