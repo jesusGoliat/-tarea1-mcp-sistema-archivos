@@ -1,0 +1,3 @@
+Archivo creado en vivo el 21 de septiembre de 2026, durante la sesion final de capturas de la Tarea 1, usando la herramienta write_file del servidor MCP de sistema de archivos.
+
+Esta linea se agrego despues con edit_file, para demostrar la operacion de modificacion.
